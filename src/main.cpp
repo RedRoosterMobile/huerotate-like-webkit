@@ -37,14 +37,12 @@ int main(int argc, char* argv[]){
     const char* out_image = (argv[3]);
     int angle = atoi(argv[1]);
     
-    // causes a segfault 11 .. sometimes
-    //cout << "FreeImage version: " << FreeImage_GetVersion() << endl;
     
-    
-    cout << "LOADING:    " << in_image << endl;
-
-    // has to be at the beginning
+    // before we can start
     FreeImage_Initialise();
+    // causes a segfault 11 .. sometimes .. or not?
+    cout << "INFO:       FreeImage version: " << FreeImage_GetVersion() << endl;
+    cout << "LOADING:    " << in_image << endl;
 
     RGBQUAD color;
     
