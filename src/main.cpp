@@ -9,7 +9,6 @@
 using std::cout;
 using std::endl;
 using std::string;
-using std::atoi;
 
 // bit depth of image
 #define BPP 24
