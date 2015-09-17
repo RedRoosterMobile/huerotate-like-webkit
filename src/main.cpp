@@ -28,20 +28,20 @@ int main(int argc, char* argv[]){
     // cout <<  "argc " << argc << endl;
 
     if (argc < 4) {
-        cout << "usage: " << argv[0] << " [angle_deg] [in_image] [out_image]" << endl;
+        cout << "USAGE: " << argv[0] << " [angle_deg] [in_image] [out_image]" << endl;
         exit(1);
     }
-    // cout <<  "command: " << argv[0] << " " << argv[1] << " " << argv[2] << " " << argv[3] << endl;
-
-    string in_image_s(argv[2]);
-    string out_image_s(argv[3]);
+    
+    // params to vars
+    const char* in_image = argv[2];
+    const char* out_image = (argv[3]);
     int angle = atoi(argv[1]);
     
     // causes a segfault 11 .. sometimes
     //cout << "FreeImage version: " << FreeImage_GetVersion() << endl;
     
-    const char* in_image = in_image_s.c_str();
-    cout << "loading: " << in_image << endl;
+    
+    cout << "LOADING:    " << in_image << endl;
 
     // has to be at the beginning
     FreeImage_Initialise();
@@ -49,24 +49,31 @@ int main(int argc, char* argv[]){
     RGBQUAD color;
     
     FIBITMAP* image = FreeImage_Load(FreeImage_GetFileType(in_image), in_image, 0);
+    if (!image) {
+      printf("ERROR: FreeImage_Load(): Wrong path?\n");
+      FreeImage_DeInitialise();
+      exit(1);
+    }
     
     unsigned int w = FreeImage_GetWidth(image);
     unsigned int h = FreeImage_GetHeight(image);
     
-    printf("Width: %u Height: %u\n", w, h);
+    printf("DIMENSIONS: %ux%u\n", w, h);
     
     // iternate pixels
     FIBITMAP* bitmap = FreeImage_Allocate(w, h, BPP);
+    if (!bitmap) {
+      printf("ERROR:      FreeImage_Allocate(): Image too big? Wanna go buy some ram? \n");
+      FreeImage_DeInitialise();
+      exit(1);
+    }
     for ( int i =0; i<w; i++) {
         for ( int j =0; j<h; j++) {
             
             FreeImage_GetPixelColor(image, i, j, &color);
             
-            // START CALCULATE HUE
+            // START CALCULATE HUE (todo: stuff into method and refresh pointer kung fu :-)
 
-
-            // @todo: http://stackoverflow.com/questions/14952138/loading-images-with-transparency-under-freeimage
-            double a = (double)color.rgbReserved;
             double cosv,sinv;
             cosv = cos(angle * PI / 180);
             sinv = sin(angle * PI / 180);
@@ -88,20 +95,14 @@ int main(int argc, char* argv[]){
             matrix[7] = 0.715 - cosv * 0.715 + sinv * 0.715;
             matrix[8] = 0.072 + cosv * 0.928 + sinv * 0.072;
             
-            // todo: this should be unneccessary
             double r,g,b;
             r = (double)color.rgbRed;
             g = (double)color.rgbGreen;
             b = (double)color.rgbBlue;
             
-            
             color.rgbRed = clamp(matrix[0] * r + matrix[1] * g + matrix[2] * b);
             color.rgbGreen = clamp(matrix[3] * r + matrix[4] * g + matrix[5] * b);
             color.rgbBlue = clamp(matrix[6] * r + matrix[7] * g + matrix[8] * b);
-            color.rgbReserved = a;
-
-            // http://freeimage.sourceforge.net/fnet/html/5056DA1D.htm
-            // alpha: color.rgbReserved
             
             // END CALCULATE HUE
             
@@ -109,10 +110,11 @@ int main(int argc, char* argv[]){
         }
     }
     // save new image
-    if ( FreeImage_Save (FIF_PNG, bitmap , out_image_s.c_str() , 0 )) {
-        cout << "Image successfully saved to " << out_image_s << endl;
+    if ( FreeImage_Save (FIF_PNG, bitmap , out_image , 0 )) {
+        cout << "SUCCESS:    Image successfully processed to " << out_image << endl;
     } else {
-        cout << "ERROR converting image" << endl;
+        cout << "ERROR:      Saving image failed. Wrong path? Permissions?" << endl;
+        FreeImage_DeInitialise();
         exit(1);
     }
 
