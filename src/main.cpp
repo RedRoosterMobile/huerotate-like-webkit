@@ -25,10 +25,8 @@ double clamp(double num) {
 }
 //========================================================================
 int main(int argc, char* argv[]){
-    // has to be at the beginning
-    FreeImage_Initialise();
     
-    cout <<  "argc " << argc << endl;
+    // cout <<  "argc " << argc << endl;
 
     if (argc < 4) {
         cout << "usage: " << argv[0] << " [angle_deg] [in_image] [out_image]" << endl;
@@ -36,15 +34,19 @@ int main(int argc, char* argv[]){
     }
     // cout <<  "command: " << argv[0] << " " << argv[1] << " " << argv[2] << " " << argv[3] << endl;
 
-
     string in_image_s(argv[2]);
     string out_image_s(argv[3]);
     int angle = atoi(argv[1]);
     
+    // causes a segfault 11 .. sometimes
     //cout << "FreeImage version: " << FreeImage_GetVersion() << endl;
     
     const char* in_image = in_image_s.c_str();
     cout << "loading: " << in_image << endl;
+
+    // has to be at the beginning
+    FreeImage_Initialise();
+
     RGBQUAD color;
     
     FIBITMAP* image = FreeImage_Load(FreeImage_GetFileType(in_image), in_image, 0);
