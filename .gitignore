@@ -5,5 +5,11 @@ lib/*
 # Ignore any executables
 bin/*
 
+# Ignore any images that might have ended up here
+*.png
+*.jpg
+*.jpeg
+*.gif
+
 # Ignore Mac specific files
 .DS_Store
