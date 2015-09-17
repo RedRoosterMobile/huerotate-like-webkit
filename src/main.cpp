@@ -48,7 +48,7 @@ int main(int argc, char* argv[]){
     
     FIBITMAP* image = FreeImage_Load(FreeImage_GetFileType(in_image), in_image, 0);
     if (!image) {
-      printf("ERROR: FreeImage_Load(): Wrong path?\n");
+      printf("ERROR:      FreeImage_Load(): Wrong path?\n");
       FreeImage_DeInitialise();
       exit(1);
     }
