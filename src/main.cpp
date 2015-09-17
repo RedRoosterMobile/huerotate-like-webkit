@@ -10,8 +10,8 @@ using std::cout;
 using std::endl;
 using std::string;
 
-// bit depth of image
-#define BPP 24
+// bit depth of image, 32 for transparency
+#define BPP 32
 
 double clamp(double num) {
     if (num < 0.0) {
@@ -64,6 +64,9 @@ int main(int argc, char* argv[]){
             
             // START CALCULATE HUE
 
+
+            // @todo: http://stackoverflow.com/questions/14952138/loading-images-with-transparency-under-freeimage
+            double a = (double)color.rgbReserved;
             double cosv,sinv;
             cosv = cos(angle * PI / 180);
             sinv = sin(angle * PI / 180);
@@ -91,9 +94,14 @@ int main(int argc, char* argv[]){
             g = (double)color.rgbGreen;
             b = (double)color.rgbBlue;
             
+            
             color.rgbRed = clamp(matrix[0] * r + matrix[1] * g + matrix[2] * b);
             color.rgbGreen = clamp(matrix[3] * r + matrix[4] * g + matrix[5] * b);
             color.rgbBlue = clamp(matrix[6] * r + matrix[7] * g + matrix[8] * b);
+            color.rgbReserved = a;
+
+            // http://freeimage.sourceforge.net/fnet/html/5056DA1D.htm
+            // alpha: color.rgbReserved
             
             // END CALCULATE HUE
             
