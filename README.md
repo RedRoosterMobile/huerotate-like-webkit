@@ -17,6 +17,7 @@ freeimage
 ```
 git clone https://github.com/RedRoosterMobile/huerotate-like-webkit
 cd huerotate-like-webkit/
+sudo apt-get install build-essential
 sudo apt-get-install libfreeimage-dev
 make
 bin/huerotate 
