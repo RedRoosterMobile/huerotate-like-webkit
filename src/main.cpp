@@ -8,7 +8,6 @@
 
 using std::cout;
 using std::endl;
-using std::string;
 
 // bit depth of image, 32 for transparency
 #define BPP 32
@@ -24,8 +23,6 @@ double clamp(double num) {
 }
 //========================================================================
 int main(int argc, char* argv[]){
-    
-    // cout <<  "argc " << argc << endl;
 
     if (argc < 4) {
         cout << "USAGE: " << argv[0] << " [angle_deg] [in_image] [out_image]" << endl;
@@ -81,6 +78,9 @@ int main(int argc, char* argv[]){
                 0, 0, 1    // Blues
             };
             
+
+            // taken from webkit: 
+            // /Source/WebCore/platform/graphics/texmap/TextureMapperShaderProgram.cpp
             matrix[0] = 0.213 + cosv * 0.787 - sinv * 0.213;
             matrix[1] = 0.715 - cosv * 0.715 - sinv * 0.715;
             matrix[2] = 0.072 - cosv * 0.072 + sinv * 0.928;
