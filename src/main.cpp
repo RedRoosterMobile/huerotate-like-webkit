@@ -9,9 +9,6 @@
 using std::cout;
 using std::endl;
 
-// bit depth of image, 32 for transparency
-#define BPP 32
-
 double clamp(double num) {
     if (num < 0.0) {
         return 0.0;
@@ -56,7 +53,7 @@ int main(int argc, char* argv[]){
     printf("DIMENSIONS: %ux%u\n", w, h);
     
     // iternate pixels
-    FIBITMAP* bitmap = FreeImage_Allocate(w, h, BPP);
+    FIBITMAP* bitmap = FreeImage_Allocate(w, h, FreeImage_GetBPP(image));
     if (!bitmap) {
       printf("ERROR:      FreeImage_Allocate(): Image too big? Wanna go buy some ram? \n");
       FreeImage_DeInitialise();
